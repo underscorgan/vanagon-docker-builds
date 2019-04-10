@@ -35,15 +35,23 @@ Vanagon projects are often versioned based on the `git describe`. To ensure you'
 ### build bolt-runtime
 
 1) Update the el-7-x86_64.rb platform to not add the pl-build-tools repo / pre-loaded pl-gcc and pl-cmake [here](https://github.com/underscorgan/puppet-runtime/commit/e544aa85cff78fb6a0ec2f59bb4d5f577d7cded0)
+
 2) Make a `runtime` directory locally to store the runtime artifacts
+
 3) `docker run -v $(PWD)/runtime:/artifacts -e VANAGON_PROJECT=bolt-runtime REPO_URL=https://github.com/underscorgan/puppet-runtime -e REPO_REF=maint/master/out-of-network vanagon:el7`
+
 4) You'll now have runtime artifacts in the 'runtime' directory. Look in there and make a note of the version (something like '201904091.1.ge544aa8')
 
 ### build puppet-bolt
 
 1) Remove unnecessary build repos from the el-7-x86_64.rb platform [here](https://github.com/underscorgan/bolt-vanagon/commit/86feb223829a46f58bdd232c04ba73eb3c91b29c)
+
 2) Update configs/components/puppet_runtime.json to use local runtime files [here](https://github.com/underscorgan/bolt-vanagon/commit/dc4b97a5282c6fe4821d00c5cfb04d7f41909e86)
+
 3) If using a custom-built runtime, edit the runtime version [here](https://github.com/underscorgan/bolt-vanagon/commit/b54867831a338e490ec7d2e72a989206f4e7b966) to match the version noted during the runtime build
+
 4) Make an `output` directory locally to store the puppet-bolt artifacts
+
 5) `docker run -v /path/to/built/runtime -v $(PWD)/output:/artifacts -e VANAGON_PROJECT=puppet-bolt REPO_URL=https://github.com/underscorgan/bolt-vanagon -e REPO_REF=b54867831a338e490ec7d2e72a989206f4e7b966 vanagon:el7`
+
 6) Your puppet-bolt rpms are now in the output directory!
