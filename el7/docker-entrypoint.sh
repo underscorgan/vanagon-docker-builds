@@ -19,6 +19,7 @@ git clone "$REPO_URL"
 cd "$directory"
 git checkout "$REPO_REF"
 
-/usr/local/bin/build --engine local "$@" "$VANAGON_PROJECT" el-7-x86_64
+bundle install
+bundle exec /usr/local/bin/build --engine local "$@" "$VANAGON_PROJECT" el-7-x86_64
 
 find output -type f -exec cp {} /artifacts \;

@@ -26,13 +26,14 @@ COPY --from=build /usr/local/lib /usr/local/lib
 COPY --from=build /usr/local/share /usr/local/share
 
 RUN mkdir -p /runtime && mkdir -p /artifacts
-RUN yum clean all && yum install -y wget
+RUN yum clean all && yum install -y wget gcc zlib-devel make
 RUN wget http://pl-build-tools.delivery.puppetlabs.net/yum/pl-build-tools-release-el-7.noarch.rpm && \
     rpm -i pl-build-tools-release-el-7.noarch.rpm && \
     yum clean all && \
-    yum install -y git pl-cmake pl-gcc && \
+    yum install -y which git pl-cmake pl-gcc pl-gettext && \
     yum remove -y pl-build-tools-release && \
     yum clean all && \
+    gem install --no-doc rspec:2.11.0 rake:10.1.0 mocha:0.10.5 && \
     gem install vanagon
 
 # pre-load some runtimes for ease of use
