@@ -1,0 +1,80 @@
+FROM centos:7 as build
+ARG ruby_major_ver=2.6
+ARG ruby_patch_ver=2
+ENV ruby_ver="$ruby_major_ver.$ruby_patch_ver"
+
+RUN yum -y groupinstall "Development Tools" && \
+    yum -y install wget openssl-devel
+
+RUN wget "http://cache.ruby-lang.org/pub/ruby/$ruby_major_ver/ruby-$ruby_ver.tar.gz" && \
+    tar xf "ruby-$ruby_ver.tar.gz"
+
+WORKDIR /ruby-$ruby_ver
+RUN ./configure && \
+    make && \
+    make install
+
+FROM centos:7 as buildtools
+ENV VANAGON_USE_MIRRORS=n
+
+COPY --from=build /usr/local/bin /usr/local/bin
+COPY --from=build /usr/local/include /usr/local/include
+COPY --from=build /usr/local/lib /usr/local/lib
+COPY --from=build /usr/local/share /usr/local/share
+
+RUN mkdir -p /build-tools
+RUN yum clean all && yum install -y which git wget gcc zlib-devel make createrepo && \
+    yum clean all && \
+    gem install --no-doc rspec:2.11.0 rake:10.1.0 mocha:0.10.5 && \
+    gem install vanagon
+
+RUN git clone https://github.com/puppetlabs/pl-build-tools-vanagon
+WORKDIR /pl-build-tools-vanagon
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-gettext el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-gcc el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-cmake el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-ruby el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-openssl el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-boost el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-yaml-cpp el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-curl el-7-x86_64
+
+RUN find output -type f -exec cp {} /build-tools \;
+WORKDIR /build-tools
+RUN createrepo --update .
+
+FROM centos:7
+ENV VANAGON_USE_MIRRORS=n
+ENV VANAGON_PROJECT=''
+ENV REPO_URL=''
+ENV REPO_REF=master
+
+COPY --from=build /usr/local/bin /usr/local/bin
+COPY --from=build /usr/local/include /usr/local/include
+COPY --from=build /usr/local/lib /usr/local/lib
+COPY --from=build /usr/local/share /usr/local/share
+COPY --from=buildtools /build-tools /build-tools
+
+RUN mkdir -p /runtime && mkdir -p /artifacts
+RUN echo -e "\
+    [pl-build-tools]\n\
+    name = PL Build Tools\n\
+    baseurl = file:///build-tools\n\
+    gpgcheck = 0\n\
+    enabled = 1\
+    " > /etc/yum.repos.d/pl-build-tools.repo
+
+RUN yum clean all && yum install -y wget gcc zlib-devel make
+RUN yum clean all && \
+    yum install -y which git && \
+    yum clean all && \
+    gem install --no-doc rspec:2.11.0 rake:10.1.0 mocha:0.10.5 && \
+    gem install vanagon
+
+WORKDIR /
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+COPY Dockerfile /
