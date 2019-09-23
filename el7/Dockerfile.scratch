@@ -30,9 +30,9 @@ RUN yum clean all && yum install -y which git wget gcc zlib-devel make createrep
 
 RUN git clone https://github.com/puppetlabs/pl-build-tools-vanagon
 WORKDIR /pl-build-tools-vanagon
-RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-gettext el-7-x86_64
 RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-gcc el-7-x86_64
 RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-cmake el-7-x86_64
+RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-gettext el-7-x86_64
 RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-ruby el-7-x86_64
 RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-openssl el-7-x86_64
 RUN bundle install && bundle exec /usr/local/bin/build --engine local pl-boost el-7-x86_64
