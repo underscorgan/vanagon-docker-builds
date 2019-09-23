@@ -38,7 +38,7 @@ Vanagon projects are often versioned based on the `git describe`. To ensure you'
 
 2) Make a `runtime` directory locally to store the runtime artifacts
 
-3) `docker run -v $(PWD)/runtime:/artifacts -e VANAGON_PROJECT=bolt-runtime REPO_URL=https://github.com/underscorgan/puppet-runtime -e REPO_REF=maint/master/out-of-network vanagon:el7`
+3) `docker run -v $(PWD)/runtime:/artifacts -e VANAGON_PROJECT=bolt-runtime -e REPO_URL=https://github.com/underscorgan/puppet-runtime -e REPO_REF=maint/master/out-of-network underscorgan/vanagon:el7`
 
 4) You'll now have runtime artifacts in the 'runtime' directory. Look in there and make a note of the version (something like '201904091.1.ge544aa8')
 
