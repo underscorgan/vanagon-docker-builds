@@ -8,7 +8,7 @@ You will need to remove the pl-build-tools repository and any `pl-*` packages fr
 
 ## Runtime dependency
 
-If you're building a project that uses puppet-runtime, you may need to make some additional changes. This container currently ships with `bolt-runtime-201903260` and `bolt-runtime-201904090`, which were the most recent runtime and the runtime included in the most recent release as of 2019-04-09. If one of those runtimes works for you, you will just need to update the location in `./configs/components/puppet-runtime.json` to "file:///runtime/".
+If you're building a project that uses puppet-runtime, you may need to make some additional changes. This container currently ships with `bolt-runtime-201909240`, `bolt-runtime-201909171`, `agent-runtime-master-201909232`, and `agent-runtime-master-201909040` which were the most recent runtime and the runtime included in the most recent releases as of 2019-09-24. If one of those runtimes works for you, you will just need to update the location in `./configs/components/puppet-runtime.json` to "file:///runtime/".
 
 If you need to build a different version of the runtime, I recommend using this container to build the version you need and storing the artifacts in a separate directory locally that you can then mount over the /runtime directory on the container. Then it will continue to work with the same change.
 

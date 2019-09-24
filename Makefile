@@ -1,14 +1,17 @@
 NAMESPACE ?= underscorgan
+date := $(shell date +"%Y%m%d")
+
+release: lint build publish docs
 
 lint:
 	@docker pull hadolint/hadolint:latest
-	@docker run --rm -v $(PWD)/el7/Dockerfile:/Dockerfile -i hadolint/hadolint hadolint --ignore DL3008 --ignore DL3018 --ignore DL4000 --ignore DL4001 Dockerfile
+	@docker run --rm -v $(PWD)/el7/Dockerfile:/Dockerfile -i hadolint/hadolint hadolint --ignore DL3008 --ignore DL3018 --ignore DL3028 --ignore DL4000 --ignore DL4001 Dockerfile
 
 build:
-	@docker build -t $(NAMESPACE)/vanagon:el7 el7
+	@docker build -t $(NAMESPACE)/vanagon:el7-$(date) el7
 
 publish:
-	@docker push $(NAMESPACE)/vanagon:el7
+	@docker push $(NAMESPACE)/vanagon:el7-$(date)
 
 docs:
 	@docker run --rm \

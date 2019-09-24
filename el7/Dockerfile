@@ -38,10 +38,18 @@ RUN wget http://pl-build-tools.delivery.puppetlabs.net/yum/pl-build-tools-releas
 
 # pre-load some runtimes for ease of use
 WORKDIR /runtime
-RUN wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201904090/artifacts/bolt-runtime-201904090.el-7-x86_64.tar.gz" && \
-    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201904090/artifacts/bolt-runtime-201904090.el-7-x86_64.settings.yaml" && \
-    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201903260/artifacts/bolt-runtime-201903260.el-7-x86_64.tar.gz" && \
-    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201903260/artifacts/bolt-runtime-201903260.el-7-x86_64.settings.yaml"
+    # included in bolt-vanagon master at b3cedf59c4e277971191218deb005d2668a35a3c
+RUN wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909240/artifacts/bolt-runtime-201909240.el-7-x86_64.tar.gz" && \
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909240/artifacts/bolt-runtime-201909240.el-7-x86_64.settings.yaml" && \
+    # included in bolt-vanagon 1.30.1
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909171/artifacts/bolt-runtime-201909171.el-7-x86_64.tar.gz" && \
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909171/artifacts/bolt-runtime-201909171.el-7-x86_64.settings.yaml" && \
+    # included in p-a master at d8709ffd3b09ca382461291ce423bc726f47a3c9
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909232/artifacts/agent-runtime-master-201909232.el-7-x86_64.tar.gz" && \
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909232/artifacts/agent-runtime-master-201909232.el-7-x86_64.settings.yaml" && \
+    # included in p-a 6.9.0
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909040/artifacts/agent-runtime-master-201909040.el-7-x86_64.tar.gz" && \
+    wget "http://builds.delivery.puppetlabs.net/puppet-runtime/201909040/artifacts/agent-runtime-master-201909040.el-7-x86_64.settings.yaml"
 
 WORKDIR /
 COPY docker-entrypoint.sh /
