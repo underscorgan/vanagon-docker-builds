@@ -1,6 +1,6 @@
 # [underscorgan/vanagon](https://github.com/underscorgan/vanagon-docker-builds)
 
-** NOTE: ** This is still experimental and may change! This README is geared towards building puppet-bolt, since that was the request that led to the container's creation. This container is built with ruby 2.6.2 using a centos:7 base image. To enable builds, this image also has the `pl-gcc` and `pl-cmake` packages installed.
+** NOTE: ** This is still experimental and may change! This README is geared towards building puppet-bolt, since that was the request that led to the container's creation. This container is built with ruby 2.6.2 using a centos:7 base image. To enable builds, this image also has the `pl-gcc`, `pl-cmake`, and `pl-gettext` packages installed.
 
 ## Changes needed to build outside of the Puppet network
 
@@ -52,6 +52,6 @@ Vanagon projects are often versioned based on the `git describe`. To ensure you'
 
 4) Make an `output` directory locally to store the puppet-bolt artifacts
 
-5) `docker run -v /path/to/built/runtime:/runtime -v $(PWD)/output:/artifacts -e VANAGON_PROJECT=puppet-bolt REPO_URL=https://github.com/underscorgan/bolt-vanagon -e REPO_REF=b54867831a338e490ec7d2e72a989206f4e7b966 vanagon:el7`
+5) `docker run -v /path/to/built/runtime:/runtime -v ${PWD}/output:/artifacts -e VANAGON_PROJECT=puppet-bolt -e REPO_URL=https://github.com/underscorgan/bolt-vanagon -e REPO_REF=b54867831a338e490ec7d2e72a989206f4e7b966 underscorgan/vanagon:el7`
 
 6) Your puppet-bolt rpms are now in the output directory!
